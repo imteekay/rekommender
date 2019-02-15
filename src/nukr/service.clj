@@ -7,30 +7,22 @@
 
 (defonce database (atom {}))
 
-(defn add-profile
-  [new-profile]
-  (if-let [profiles (get @database :profiles)]
-    (conj profiles new-profile)
-    [new-profile]))
-
 (def db-interceptor
   {:name :database-interceptor
    :enter (fn [context]
             (update context :request assoc :database @database))
    :leave (fn [context]
-            (let [args   (:tx-data context)
-                  table  (first (map key args))
-                  params (get args table)]
-              (if (and args table params)
-                (do
-                  (swap! database assoc table (add-profile params))
-                  (assoc-in context [:request :database] @database))
-                context)))})
+            (if-let [[operation & params] (:tx-data context)]
+              (do
+                (apply swap! database operation params)
+                (assoc-in context [:request :database] @database))
+              context))})
 
 (def routes
   (route/expand-routes
    #{["/api/profiles" :post [db-interceptor (body-params/body-params) http/json-body profile-interceptors/profile-create]]
-     ["/api/profiles" :get [db-interceptor http/json-body profile-interceptors/profiles-list]]}))
+     ["/api/profiles" :get [db-interceptor http/json-body profile-interceptors/profiles-list]]
+     ["/api/profiles/:id" :put [(body-params/body-params) http/json-body profile-interceptors/entity-render profile-interceptors/profile-view db-interceptor profile-interceptors/profile-update]]}))
 
 (def service {:env :prod
               ::http/routes routes
