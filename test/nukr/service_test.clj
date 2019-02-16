@@ -14,7 +14,8 @@
 
 (deftest api-integration-test
   (testing "API Integration Test"
-    (let [profile-id (atom nil)]
+    (let [profile-id (atom nil)
+          second-profile-id (atom nil)]
       (let [response (response-for service
                                    :get
                                    "/api/profiles"
@@ -56,4 +57,32 @@
                                              "Accept" "application/json"})
             parsed-response-body (parse-response-body response)]
         (is (= 200 (:status response)))
-        (is (= false (:opt-in parsed-response-body)))))))
+        (is (= false (:opt-in parsed-response-body))))
+
+      (let [username "Kazumi"
+            profile {:username username}
+            response (response-for service
+                                   :post
+                                   "/api/profiles"
+                                   :body (json/encode profile)
+                                   :headers {"Content-Type" "application/json"
+                                             "Accept" "application/json"})
+            parsed-response-body (parse-response-body response)]
+        (reset! second-profile-id (:id parsed-response-body))
+        (is (= username (:username parsed-response-body)))
+        (is (= 201 (:status response))))
+
+      (let [first-profile-id @profile-id
+            second-profile-id @second-profile-id
+            profiles-ids {:first-profile-id first-profile-id
+                          :second-profile-id second-profile-id}
+            response (response-for service
+                                   :post
+                                   "/api/connections"
+                                   :body (json/encode profiles-ids)
+                                   :headers {"Content-Type" "application/json"
+                                             "Accept" "application/json"})
+            parsed-response-body (parse-response-body response)]
+        (is (= first-profile-id (:first-profile-id parsed-response-body)))
+        (is (= second-profile-id (:second-profile-id parsed-response-body)))
+        (is (= 201 (:status response)))))))

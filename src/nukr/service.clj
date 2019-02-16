@@ -3,7 +3,8 @@
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [ring.util.response :as ring-resp]
-            [nukr.interceptors.profile :as profile-interceptors]))
+            [nukr.interceptors.profile :as profile-interceptors]
+            [nukr.interceptors.connection :as connection-interceptors]))
 
 (defonce database (atom {}))
 
@@ -22,7 +23,8 @@
   (route/expand-routes
    #{["/api/profiles" :post [db-interceptor (body-params/body-params) http/json-body profile-interceptors/profile-create]]
      ["/api/profiles" :get [db-interceptor http/json-body profile-interceptors/profiles-list]]
-     ["/api/profiles/:id" :put [(body-params/body-params) http/json-body profile-interceptors/entity-render profile-interceptors/profile-view db-interceptor profile-interceptors/profile-update]]}))
+     ["/api/profiles/:id" :put [(body-params/body-params) http/json-body profile-interceptors/entity-render profile-interceptors/profile-view db-interceptor profile-interceptors/profile-update]]
+     ["/api/connections" :post [db-interceptor (body-params/body-params) http/json-body connection-interceptors/connection-create]]}))
 
 (def service {:env :prod
               ::http/routes routes
