@@ -1,17 +1,6 @@
 (ns nukr.interceptors.profile
-  (:require [nukr.http-helpers :refer :all]))
-
-(defn make-profile
-  [id username]
-  {:id       id
-   :username username
-   :opt-in   true})
-
-(defn find-profile-by-id
-  [database profile-id]
-  (->> (:profiles database)
-       (filter #(= profile-id (:id %)))
-       first))
+  (:require [nukr.http-helpers :refer :all]
+            [nukr.models.profile :as profile-model]))
 
 (def entity-render
   {:name :entity-render
@@ -23,7 +12,7 @@
   {:name :profile-view
    :leave (fn [context]
             (if-let [profile-id (get-in context [:request :path-params :id])]
-              (if-let [profile (find-profile-by-id (get-in context [:request :database]) profile-id)]
+              (if-let [profile (profile-model/find-profile-by-id (get-in context [:request :database]) profile-id)]
                 (assoc context :result profile)
                 context)
               context))})
@@ -39,7 +28,7 @@
    :enter (fn [context]
             (let [username    (get-in context [:request :json-params :username] "Unnamed Profile")
                   db-id       (str (gensym "l"))
-                  new-profile (make-profile db-id username)]
+                  new-profile (profile-model/make-profile db-id username)]
               (assoc context
                      :response (created new-profile)
                      :tx-data [add-profile new-profile])))})
@@ -61,7 +50,7 @@
 
 (defn update-profile
   [database profile-id opt-in]
-  (if-let [profile (find-profile-by-id database profile-id)]
+  (if-let [profile (profile-model/find-profile-by-id database profile-id)]
     (update-in database [:profiles] (partial update-opt-in profile-id opt-in))
     database))
 
