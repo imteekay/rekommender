@@ -258,4 +258,14 @@
                                                "Accept" "application/json"})
               parsed-response-body (parse-response-body response)]
           (is (= ["Monica" "Chandler"] (map #(:username %) parsed-response-body)))
+          (is (= 200 (:status response)))))
+
+      (testing "Gets profiles suggestion for Chandler"
+        (let [response (response-for service
+                                     :get
+                                     (str "/api/profiles/" @fifth-profile-id "/suggestions")
+                                     :headers {"Content-Type" "application/json"
+                                               "Accept" "application/json"})
+              parsed-response-body (parse-response-body response)]
+          (is (= ["Rachel" "Monica" "Phoebe"] (map #(:username %) parsed-response-body)))
           (is (= 200 (:status response))))))))
