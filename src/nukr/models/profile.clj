@@ -11,3 +11,7 @@
   (->> (:profiles database)
        (filter #(= profile-id (:id %)))
        first))
+
+(defn get-profiles
+  [database]
+  (:profiles database))

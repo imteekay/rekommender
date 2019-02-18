@@ -4,7 +4,8 @@
             [io.pedestal.http.body-params :as body-params]
             [ring.util.response :as ring-resp]
             [nukr.interceptors.profile :as profile-interceptors]
-            [nukr.interceptors.connection :as connection-interceptors]))
+            [nukr.interceptors.connection :as connection-interceptors]
+            [nukr.interceptors.recommender :as recommender-interceptors]))
 
 (defonce database (atom {}))
 
@@ -24,6 +25,7 @@
    #{["/api/profiles" :post [db-interceptor (body-params/body-params) http/json-body profile-interceptors/profile-create]]
      ["/api/profiles" :get [db-interceptor http/json-body profile-interceptors/profiles-list]]
      ["/api/profiles/:id" :put [(body-params/body-params) http/json-body profile-interceptors/entity-render profile-interceptors/profile-view db-interceptor profile-interceptors/profile-update]]
+     ["/api/profiles/:id/suggestions" :get [db-interceptor http/json-body recommender-interceptors/profiles-suggestion]]
      ["/api/connections" :post [db-interceptor (body-params/body-params) http/json-body connection-interceptors/connection-create]]}))
 
 (def service {:env :prod
