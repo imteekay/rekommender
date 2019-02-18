@@ -2,6 +2,8 @@
   (:require [nukr.http-helpers :refer :all]
             [nukr.models.profile :as profile-model]))
 
+;; Render Resource Interceptor
+
 (def entity-render
   {:name :entity-render
    :leave (fn [context]
@@ -17,28 +19,40 @@
                 context)
               context))})
 
+;; Create Interceptor
+
 (defn add-profile
   [database new-profile]
   (if-let [profiles (:profiles database)]
     (assoc database :profiles (conj profiles new-profile))
     (assoc database :profiles [new-profile])))
 
+(defn profile-create-enter
+  [context]
+  (let [username    (get-in context [:request :json-params :username] "Unnamed Profile")
+        db-id       (str (gensym "l"))
+        new-profile (profile-model/make-profile db-id username)]
+    (assoc context
+           :response (created new-profile)
+           :tx-data [add-profile new-profile])))
+
 (def profile-create
   {:name :profile-create
-   :enter (fn [context]
-            (let [username    (get-in context [:request :json-params :username] "Unnamed Profile")
-                  db-id       (str (gensym "l"))
-                  new-profile (profile-model/make-profile db-id username)]
-              (assoc context
-                     :response (created new-profile)
-                     :tx-data [add-profile new-profile])))})
+   :enter profile-create-enter})
+
+;; List Interceptor
+
+(defn profiles-list-enter
+  [context]
+  (if-let [profiles (get-in context [:request :database :profiles])]
+    (assoc context :response (ok profiles))
+    (assoc context :response (ok []))))
 
 (def profiles-list
   {:name :profiles-list
-   :enter (fn [context]
-            (if-let [profiles (get-in context [:request :database :profiles])]
-              (assoc context :response (ok profiles))
-              (assoc context :response (ok []))))})
+   :enter profiles-list-enter})
+
+;; Update Interceptor
 
 (defn update-opt-in
   [profile-id opt-in profiles]
@@ -54,9 +68,12 @@
     (update-in database [:profiles] (partial update-opt-in profile-id opt-in))
     database))
 
+(defn profile-update-enter
+  [context]
+  (if-let [profile-id (get-in context [:request :path-params :id])]
+    (let [opt-in (get-in context [:request :json-params :opt-in])]
+      (assoc context :tx-data [update-profile profile-id opt-in]))))
+
 (def profile-update
   {:name :profile-update
-   :enter (fn [context]
-            (if-let [profile-id (get-in context [:request :path-params :id])]
-              (let [opt-in (get-in context [:request :json-params :opt-in])]
-                (assoc context :tx-data [update-profile profile-id opt-in]))))})
+   :enter profile-update-enter})

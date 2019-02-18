@@ -13,13 +13,16 @@
     (assoc database :connections (conj connections connection))
     (assoc database :connections [connection])))
 
+(defn connection-create-enter
+  [context]
+  (if-let [first-profile-id (get-in context [:request :json-params :first-profile-id])]
+    (if-let [second-profile-id (get-in context [:request :json-params :second-profile-id])]
+      (let [connection-id  (str (gensym "l"))
+            new-connection (make-connection connection-id first-profile-id second-profile-id)]
+        (assoc context
+               :response (created new-connection)
+               :tx-data [add-connection new-connection])))))
+
 (def connection-create
   {:name :connection-create
-   :enter (fn [context]
-            (if-let [first-profile-id (get-in context [:request :json-params :first-profile-id])]
-              (if-let [second-profile-id (get-in context [:request :json-params :second-profile-id])]
-                (let [connection-id  (str (gensym "l"))
-                      new-connection (make-connection connection-id first-profile-id second-profile-id)]
-                  (assoc context
-                         :response (created new-connection)
-                         :tx-data [add-connection new-connection])))))})
+   :enter connection-create-enter})

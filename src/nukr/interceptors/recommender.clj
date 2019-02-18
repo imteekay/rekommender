@@ -81,10 +81,13 @@
           connections (connection-model/get-connections database)]
       (profiles-suggestions profile profiles connections))))
 
+(defn profiles-suggestion-enter
+  [context]
+  (if-let [profile-id (get-in context [:request :path-params :id])]
+    (if-let [database (get-in context [:request :database])]
+      (let [suggestion (get-profiles-suggestion database profile-id)]
+        (assoc context :response (ok suggestion))))))
+
 (def profiles-suggestion
   {:name :profiles-suggestion
-   :enter (fn [context]
-            (if-let [profile-id (get-in context [:request :path-params :id])]
-              (if-let [database (get-in context [:request :database])]
-                (let [suggestion (get-profiles-suggestion database profile-id)]
-                  (assoc context :response (ok suggestion))))))})
+   :enter profiles-suggestion-enter})
