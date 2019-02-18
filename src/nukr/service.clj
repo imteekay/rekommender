@@ -3,30 +3,18 @@
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [ring.util.response :as ring-resp]
+            [nukr.interceptors.database :as database-interceptors]
             [nukr.interceptors.profile :as profile-interceptors]
             [nukr.interceptors.connection :as connection-interceptors]
             [nukr.interceptors.recommender :as recommender-interceptors]))
 
-(defonce database (atom {}))
-
-(def db-interceptor
-  {:name :database-interceptor
-   :enter (fn [context]
-            (update context :request assoc :database @database))
-   :leave (fn [context]
-            (if-let [[operation & params] (:tx-data context)]
-              (do
-                (apply swap! database operation params)
-                (assoc-in context [:request :database] @database))
-              context))})
-
 (def routes
   (route/expand-routes
-   #{["/api/profiles" :post [db-interceptor (body-params/body-params) http/json-body profile-interceptors/profile-create]]
-     ["/api/profiles" :get [db-interceptor http/json-body profile-interceptors/profiles-list]]
-     ["/api/profiles/:id" :put [(body-params/body-params) http/json-body profile-interceptors/entity-render profile-interceptors/profile-view db-interceptor profile-interceptors/profile-update]]
-     ["/api/profiles/:id/suggestions" :get [db-interceptor http/json-body recommender-interceptors/profiles-suggestion]]
-     ["/api/connections" :post [db-interceptor (body-params/body-params) http/json-body connection-interceptors/connection-create]]}))
+   #{["/api/profiles" :post [database-interceptors/db-interceptor (body-params/body-params) http/json-body profile-interceptors/profile-create]]
+     ["/api/profiles" :get [database-interceptors/db-interceptor http/json-body profile-interceptors/profiles-list]]
+     ["/api/profiles/:id" :put [(body-params/body-params) http/json-body profile-interceptors/entity-render profile-interceptors/profile-view database-interceptors/db-interceptor profile-interceptors/profile-update]]
+     ["/api/profiles/:id/suggestions" :get [database-interceptors/db-interceptor http/json-body recommender-interceptors/profiles-suggestion]]
+     ["/api/connections" :post [database-interceptors/db-interceptor (body-params/body-params) http/json-body connection-interceptors/connection-create]]}))
 
 (def service {:env :prod
               ::http/routes routes

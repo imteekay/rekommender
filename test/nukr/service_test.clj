@@ -30,7 +30,7 @@
           (is (= 200 (:status response)))
           (is (= [] (parse-response-body response)))))
 
-      (testing "Creates new profile"
+      (testing "Creates new profile to Rachel"
         (let [username "Rachel"
               profile {:username username}
               response (response-for service
@@ -55,7 +55,7 @@
           (is (not-empty parsed-response-body))
           (is (= "Rachel" (-> parsed-response-body first :username)))))
 
-      (testing "Creates new profile"
+      (testing "Creates new profile to Monica"
         (let [username "Monica"
               profile {:username username}
               response (response-for service
@@ -69,7 +69,7 @@
           (is (= username (:username parsed-response-body)))
           (is (= 201 (:status response)))))
 
-      (testing "Creates new profile"
+      (testing "Creates new profile to Phoebe"
         (let [username "Phoebe"
               profile {:username username}
               response (response-for service
@@ -83,7 +83,7 @@
           (is (= username (:username parsed-response-body)))
           (is (= 201 (:status response)))))
 
-      (testing "Creates new profile"
+      (testing "Creates new profile to Joey"
         (let [username "Joey"
               profile {:username username}
               response (response-for service
@@ -97,7 +97,7 @@
           (is (= username (:username parsed-response-body)))
           (is (= 201 (:status response)))))
 
-      (testing "Creates new profile"
+      (testing "Creates new profile to Chandler"
         (let [username "Chandler"
               profile {:username username}
               response (response-for service
@@ -111,7 +111,7 @@
           (is (= username (:username parsed-response-body)))
           (is (= 201 (:status response)))))
 
-      (testing "Creates new profile"
+      (testing "Creates new profile to Ross"
         (let [username "Ross"
               profile {:username username}
               response (response-for service
@@ -125,7 +125,7 @@
           (is (= username (:username parsed-response-body)))
           (is (= 201 (:status response)))))
 
-      (testing "Updates the Ross profile"
+      (testing "Updates the opt-in option for Ross"
         (let [opt-in false
               profile {:opt-in opt-in}
               response (response-for service
