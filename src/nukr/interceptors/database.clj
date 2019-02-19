@@ -1,6 +1,6 @@
 (ns nukr.interceptors.database)
 
-(defonce database (atom {}))
+(defonce database (atom {:profiles [] :connections []}))
 
 (defn db-enter
   [context]

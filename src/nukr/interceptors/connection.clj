@@ -10,8 +10,7 @@
 (defn add-connection
   [database connection]
   (if-let [connections (:connections database)]
-    (assoc database :connections (conj connections connection))
-    (assoc database :connections [connection])))
+    (assoc database :connections (conj connections connection))))
 
 (defn connection-create-enter
   [context]

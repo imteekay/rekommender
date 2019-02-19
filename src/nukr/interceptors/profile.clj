@@ -24,8 +24,7 @@
 (defn add-profile
   [database new-profile]
   (if-let [profiles (:profiles database)]
-    (assoc database :profiles (conj profiles new-profile))
-    (assoc database :profiles [new-profile])))
+    (assoc database :profiles (conj profiles new-profile))))
 
 (defn profile-create-enter
   [context]
