@@ -1,8 +1,8 @@
 (ns nukr.models.profile)
 
 (defn make-profile
-  [id username]
-  {:id       id
+  [username]
+  {:id       (str (gensym "p"))
    :username username
    :opt-in   true})
 

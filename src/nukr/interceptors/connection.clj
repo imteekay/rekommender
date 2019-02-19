@@ -2,8 +2,8 @@
   (:require [nukr.http-helpers :refer :all]))
 
 (defn make-connection
-  [connection-id first-profile-id second-profile-id]
-  {:id connection-id
+  [first-profile-id second-profile-id]
+  {:id (str (gensym "c"))
    :first-profile-id first-profile-id
    :second-profile-id second-profile-id})
 
@@ -16,8 +16,7 @@
   [context]
   (if-let [first-profile-id (get-in context [:request :json-params :first-profile-id])]
     (if-let [second-profile-id (get-in context [:request :json-params :second-profile-id])]
-      (let [connection-id  (str (gensym "l"))
-            new-connection (make-connection connection-id first-profile-id second-profile-id)]
+      (let [new-connection (make-connection first-profile-id second-profile-id)]
         (assoc context
                :response (created new-connection)
                :tx-data [add-connection new-connection])))))

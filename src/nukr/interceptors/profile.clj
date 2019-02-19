@@ -29,8 +29,7 @@
 (defn profile-create-enter
   [context]
   (let [username    (get-in context [:request :json-params :username] "Unnamed Profile")
-        db-id       (str (gensym "l"))
-        new-profile (profile-model/make-profile db-id username)]
+        new-profile (profile-model/make-profile username)]
     (assoc context
            :response (created new-profile)
            :tx-data [add-profile new-profile])))
