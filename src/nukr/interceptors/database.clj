@@ -8,7 +8,7 @@
 
 (defn db-leave
   [context]
-  (if-let [[operation & params] (:tx-data context)]
+  (if-let [[operation & params] (:data context)]
     (do
       (apply swap! database operation params)
       (assoc-in context [:request :database] @database))

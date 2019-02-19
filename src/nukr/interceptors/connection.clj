@@ -19,7 +19,7 @@
       (let [new-connection (make-connection first-profile-id second-profile-id)]
         (assoc context
                :response (created new-connection)
-               :tx-data [add-connection new-connection])))))
+               :data [add-connection new-connection])))))
 
 (def connection-create
   {:name :connection-create

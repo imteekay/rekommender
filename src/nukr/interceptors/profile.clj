@@ -32,7 +32,7 @@
         new-profile (profile-model/make-profile username)]
     (assoc context
            :response (created new-profile)
-           :tx-data [add-profile new-profile])))
+           :data [add-profile new-profile])))
 
 (def profile-create
   {:name :profile-create
@@ -70,7 +70,7 @@
   [context]
   (if-let [profile-id (get-in context [:request :path-params :id])]
     (let [opt-in (get-in context [:request :json-params :opt-in])]
-      (assoc context :tx-data [update-profile profile-id opt-in]))))
+      (assoc context :data [update-profile profile-id opt-in]))))
 
 (def profile-update
   {:name :profile-update
