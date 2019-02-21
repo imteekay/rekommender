@@ -1,9 +1,9 @@
-(ns nukr.service-test
+(ns rekommender.service-test
   (:require [clojure.test :refer :all]
             [io.pedestal.test :refer :all]
             [io.pedestal.http :as bootstrap]
             [cheshire.core :as json]
-            [nukr.service :as service]))
+            [rekommender.service :as service]))
 
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))

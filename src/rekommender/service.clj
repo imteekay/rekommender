@@ -1,12 +1,12 @@
-(ns nukr.service
+(ns rekommender.service
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
             [ring.util.response :as ring-resp]
-            [nukr.interceptors.database :as database-interceptors]
-            [nukr.interceptors.profile :as profile-interceptors]
-            [nukr.interceptors.connection :as connection-interceptors]
-            [nukr.interceptors.recommender :as recommender-interceptors]))
+            [rekommender.interceptors.database :as database-interceptors]
+            [rekommender.interceptors.profile :as profile-interceptors]
+            [rekommender.interceptors.connection :as connection-interceptors]
+            [rekommender.interceptors.recommender :as recommender-interceptors]))
 
 (def routes
   (route/expand-routes

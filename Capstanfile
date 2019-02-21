@@ -9,8 +9,8 @@ base: cloudius/osv-openjdk8
 #
 # The command line passed to OSv to start up the application.
 #
-#cmdline: /java.so -cp /nukr/app.jar clojure.main -m nukr
-cmdline: /java.so -jar /nukr/app.jar
+#cmdline: /java.so -cp /rekommender/app.jar clojure.main -m rekommender
+cmdline: /java.so -jar /rekommender/app.jar
 
 #
 # The command to use to build the application.
@@ -25,5 +25,5 @@ cmdline: /java.so -jar /nukr/app.jar
 # List of files that are included in the generated image.
 #
 files:
-  /nukr/app.jar: ./target/nukr-0.0.1-SNAPSHOT-standalone.jar
+  /rekommender/app.jar: ./target/rekommender-0.0.1-SNAPSHOT-standalone.jar
 

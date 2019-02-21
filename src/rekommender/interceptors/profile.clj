@@ -1,6 +1,6 @@
-(ns nukr.interceptors.profile
-  (:require [nukr.http-helpers :refer :all]
-            [nukr.models.profile :as profile-model]))
+(ns rekommender.interceptors.profile
+  (:require [rekommender.http-helpers :refer :all]
+            [rekommender.models.profile :as profile-model]))
 
 ;; Render Resource Interceptor
 

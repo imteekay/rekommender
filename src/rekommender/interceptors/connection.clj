@@ -1,6 +1,6 @@
-(ns nukr.interceptors.connection
-  (:require [nukr.http-helpers :refer :all]
-            [nukr.models.connection :as connection-model]))
+(ns rekommender.interceptors.connection
+  (:require [rekommender.http-helpers :refer :all]
+            [rekommender.models.connection :as connection-model]))
 
 (defn add-connection
   [database connection]

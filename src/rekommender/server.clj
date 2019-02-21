@@ -1,8 +1,8 @@
-(ns nukr.server
+(ns rekommender.server
   (:gen-class)
   (:require [io.pedestal.http :as server]
             [io.pedestal.http.route :as route]
-            [nukr.service :as service]))
+            [rekommender.service :as service]))
 
 (defonce runnable-service (server/create-server service/service))
 

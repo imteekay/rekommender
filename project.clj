@@ -1,4 +1,4 @@
-(defproject nukr "0.0.1-SNAPSHOT"
+(defproject rekommender "0.0.1-SNAPSHOT"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
@@ -11,8 +11,8 @@
                  [cheshire "5.8.1"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"]
-  :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "nukr.server/run-dev"]}
+  :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "rekommender.server/run-dev"]}
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.5"]]}
-             :uberjar {:aot [nukr.server]}}
-  :main ^{:skip-aot true} nukr.server)
+             :uberjar {:aot [rekommender.server]}}
+  :main ^{:skip-aot true} rekommender.server)
 

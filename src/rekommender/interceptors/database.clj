@@ -1,4 +1,4 @@
-(ns nukr.interceptors.database)
+(ns rekommender.interceptors.database)
 
 (defonce database (atom {:profiles [] :connections []}))
 

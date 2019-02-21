@@ -1,6 +1,6 @@
-(ns nukr.models.connection-test
+(ns rekommender.models.connection-test
   (:require [clojure.test :refer :all]
-            [nukr.models.connection :refer :all]))
+            [rekommender.models.connection :refer :all]))
 
 (deftest make-connection-test
   (testing "Makes a new profile"

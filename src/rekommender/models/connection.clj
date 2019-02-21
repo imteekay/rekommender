@@ -1,4 +1,4 @@
-(ns nukr.models.connection)
+(ns rekommender.models.connection)
 
 (defn make-connection
   [first-profile-id second-profile-id]

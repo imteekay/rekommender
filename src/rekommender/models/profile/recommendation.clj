@@ -1,4 +1,4 @@
-(ns nukr.models.profile.recommendation
+(ns rekommender.models.profile.recommendation
   (:require [clojure.set :as set]))
 
 (defn connected?

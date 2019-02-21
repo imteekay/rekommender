@@ -1,9 +1,9 @@
-(ns nukr.interceptors.recommender
-  (:require [nukr.http-helpers :refer :all]
-            [nukr.interceptors.profile :as profile-interceptor]
-            [nukr.models.profile :as profile-model]
-            [nukr.models.connection :as connection-model]
-            [nukr.models.profile.recommendation :as recommendation]))
+(ns rekommender.interceptors.recommender
+  (:require [rekommender.http-helpers :refer :all]
+            [rekommender.interceptors.profile :as profile-interceptor]
+            [rekommender.models.profile :as profile-model]
+            [rekommender.models.connection :as connection-model]
+            [rekommender.models.profile.recommendation :as recommendation]))
 
 (defn get-profiles-suggestion
   [database profile-id]

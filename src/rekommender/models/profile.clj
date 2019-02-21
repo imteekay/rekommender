@@ -1,4 +1,4 @@
-(ns nukr.models.profile)
+(ns rekommender.models.profile)
 
 (defn make-profile
   [username]

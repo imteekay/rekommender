@@ -1,4 +1,4 @@
-(ns nukr.http-helpers)
+(ns rekommender.http-helpers)
 
 (defn response [status body & {:as headers}]
   {:status status :body body :headers headers})
